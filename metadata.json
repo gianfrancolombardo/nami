@@ -1,0 +1,5 @@
+{
+  "name": "NutriPeque AI",
+  "description": "Un copiloto nutricional inteligente para niños (12-36m) que rastrea déficits y utiliza un motor de recomendación inversa para sugerir alimentos específicos para optimizar el neurodesarrollo.",
+  "requestFramePermissions": []
+}
