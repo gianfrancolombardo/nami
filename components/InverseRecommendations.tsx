@@ -98,7 +98,7 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
       <div className="flex flex-col gap-3 mb-8">
         <div className="flex items-center gap-2 text-indigo-500 mb-1">
           <Sparkles className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Plan Completo de Hoy</span>
+          <span className="text-[10px] font-black uppercase tracking-widest">El Plan de Nami</span>
         </div>
         <h2 className="text-2xl lg:text-3xl font-black text-slate-800 tracking-tight leading-tight">
           {roadmap.empatheticMessage}
@@ -113,7 +113,7 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
             <div key={gap.nutrient} className={cn("flex flex-col gap-4", !isPrimary && "opacity-90")}>
               <div className="flex items-center gap-2">
                 <div className={cn("px-3 py-1 rounded-lg font-black text-xs uppercase tracking-wide", isPrimary ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-500")}>
-                  {isPrimary ? "Prioridad 1" : "Secundario"}
+                  {isPrimary ? "Misión Principal 🎯" : "Misión Secundaria"}
                 </div>
                 <h3 className={cn("font-black text-slate-800", isPrimary ? "text-xl" : "text-lg")}>
                   Falta: {gap.nutrient}

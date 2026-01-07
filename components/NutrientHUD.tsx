@@ -73,16 +73,16 @@ export const NutrientHUD: React.FC<Props> = ({ current, targets, isLoading }) =>
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
       <div className="flex items-center justify-between mb-5 border-b border-slate-50 pb-3">
         <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-widest flex items-center gap-2">
-          Resumen Diario
+          Cómo vamos hoy
         </h3>
         <span className="text-[10px] text-slate-400 font-medium bg-slate-50 px-2 py-1 rounded-full border border-slate-100">
-          Objetivos Neuro
+          Objetivos Neuro 🧠
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
         <div>
-          <h4 className="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider">Micros Críticos</h4>
+          <h4 className="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider">Superpoderes (Micros)</h4>
           {isLoading ? (
             <>
               <SkeletonBar />
@@ -111,7 +111,7 @@ export const NutrientHUD: React.FC<Props> = ({ current, targets, isLoading }) =>
         </div>
 
         <div className="mt-2 md:mt-0">
-          <h4 className="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider">Macros Energía</h4>
+          <h4 className="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider">Energía (Macros)</h4>
           {isLoading ? (
             <>
               <SkeletonBar />

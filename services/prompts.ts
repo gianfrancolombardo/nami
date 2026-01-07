@@ -8,7 +8,7 @@ REGLAS DE ORO:
 4. ESTRUCTURA: Devuelve una lista de "gaps" (huecos).
 5. ORDEN: Ordena los huecos por prioridad (HIGH primero).
 6. OPCIONES: Para CADA hueco, propón 2 opciones (una vegetal obligatoria).
-7. SINERGIA: Cada opción DEBE incluir un "Tip de NutriPeque".
+7. SINERGIA: Cada opción DEBE incluir un "Tip de Nami".
 8. CANTIDADES: Valores seguros para 12-36m.
 
 FORMATO DE SALIDA (JSON):
@@ -32,7 +32,7 @@ FORMATO DE SALIDA (JSON):
 }`;
 
 export const PARSE_SYSTEM_INSTRUCTION = `
-Eres un nutricionista pediátrico experto para la app "NutriPeque AI".
+Eres un nutricionista pediátrico experto para la app "Nami AI".
 Tu objetivo es interpretar lo que comió un niño pequeño (12-36 meses) y convertirlo en una LISTA de ingredientes/alimentos JSON estructurados.
 Debes ajustar el tamaño de las porciones según la edad proporcionada.
 

@@ -52,10 +52,11 @@ const Onboarding: React.FC<{ onComplete: (p: ChildProfile) => void, isLoading: b
             <Baby className="w-8 h-8 text-indigo-600" />
           </motion.div>
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">NutriPeque AI</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">¡Hola, soy Nami! 👋</h1>
         <p className="text-slate-500 mb-8 text-center text-sm">
-          Configuremos el perfil de neurodesarrollo de tu pequeño para comenzar.
+          Vamos a crear el perfil de tu peque para empezar esta aventura.
         </p>
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="group">
             <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Nombre</label>
@@ -66,7 +67,7 @@ const Onboarding: React.FC<{ onComplete: (p: ChildProfile) => void, isLoading: b
                 value={name}
                 onChange={e => setName(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm font-medium"
-                placeholder="Ej. Leo"
+                placeholder="Ej. Leo, Sofía..."
                 required
               />
             </div>
@@ -82,7 +83,7 @@ const Onboarding: React.FC<{ onComplete: (p: ChildProfile) => void, isLoading: b
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Peso Actual (kg)</label>
+            <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Peso actual (kg)</label>
             <div className="relative">
               <Scale className="absolute left-3 top-3.5 w-4 h-4 text-slate-400" />
               <input
@@ -91,7 +92,7 @@ const Onboarding: React.FC<{ onComplete: (p: ChildProfile) => void, isLoading: b
                 value={weight}
                 onChange={e => setWeight(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm font-medium"
-                placeholder="11.5"
+                placeholder="Ej. 12.5"
                 required
               />
             </div>
@@ -103,11 +104,11 @@ const Onboarding: React.FC<{ onComplete: (p: ChildProfile) => void, isLoading: b
             disabled={isLoading}
             className="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 transition-transform shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 disabled:bg-indigo-400"
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Crear Perfil <ArrowRight className="w-4 h-4" /></>}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>¡Listo, vamos! <ArrowRight className="w-4 h-4" /></>}
           </motion.button>
         </form>
-      </motion.div>
-    </div>
+      </motion.div >
+    </div >
   );
 };
 
@@ -288,7 +289,7 @@ export default function App() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
           <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-500 font-medium animate-pulse">Cargando NutriPeque...</p>
+          <p className="text-slate-500 font-medium animate-pulse">Cargando Nami...</p>
         </div>
       </div>
     );
@@ -314,7 +315,7 @@ export default function App() {
             <div className="bg-indigo-600 p-1.5 rounded-lg shadow-indigo-200 shadow-lg">
               <Baby className="w-5 h-5 text-white" />
             </div>
-            <span className="font-extrabold text-lg tracking-tight text-slate-900">NutriPeque AI</span>
+            <span className="font-extrabold text-lg tracking-tight text-slate-900">Nami</span>
           </motion.div>
 
           <div className="relative">
@@ -371,9 +372,9 @@ export default function App() {
           className="flex justify-between items-end px-1 pb-6 pt-2"
         >
           <div>
-            <h2 className="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Hola, Papá/Mamá</h2>
+            <h2 className="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">¡Hola familia! 👋</h2>
             <p className="text-slate-500 text-sm lg:text-base">
-              Nutrición de <span className="font-bold text-indigo-600">{activeProfile.name}</span> <span className="text-slate-300">|</span> {ageMonths} meses
+              Cuidando a <span className="font-bold text-indigo-600">{activeProfile.name}</span> <span className="text-slate-300">|</span> {ageMonths} mesazos
             </p>
           </div>
           <motion.div
@@ -398,14 +399,14 @@ export default function App() {
             >
               <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500"></div>
               <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                <Utensils className="w-4 h-4" /> Registrar Comida
+                <Utensils className="w-4 h-4" /> ¿Qué comió hoy?
               </h3>
 
               <form onSubmit={handleLogFood} className="relative group">
                 <textarea
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder='Prueba: "Se comió medio plátano" o "Un tazón pequeño de lentejas"...'
+                  placeholder='Cuéntame qué comió... ejemplo: "Desayunó un huevo revuelto y media tostada"'
                   className="w-full p-5 pr-14 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none resize-none text-base transition-all min-h-[120px] placeholder:text-slate-400 font-medium"
                   disabled={isProcessing}
                 />
@@ -426,7 +427,7 @@ export default function App() {
               <div className="mt-4 flex items-start gap-3 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100/50">
                 <div className="text-indigo-500 mt-0.5"><Scale className="w-3.5 h-3.5" /></div>
                 <p className="text-[11px] text-indigo-800 leading-relaxed font-medium">
-                  <strong>Inteligencia Nutricional:</strong> La IA ajusta porciones automáticamente según la edad ({ageMonths}m) y peso ({activeProfile.weightKg}kg) de {activeProfile.name}.
+                  <strong>Magia de Nami:</strong> Calculo las porciones automáticamente según que {activeProfile.name} tiene {ageMonths} meses. 🪄
                 </p>
               </div>
             </motion.div>
@@ -516,7 +517,7 @@ export default function App() {
                     <div className="bg-slate-50 p-4 rounded-full mb-4">
                       <Utensils className="w-8 h-8 opacity-30" />
                     </div>
-                    <p className="text-sm font-bold uppercase tracking-widest opacity-50">Esperando el primer registro...</p>
+                    <p className="text-sm font-bold uppercase tracking-widest opacity-50">¡Aún no ha comido nada!</p>
                   </motion.div>
                 )}
               </div>
