@@ -39,10 +39,13 @@ export interface DailyLog {
 export interface Suggestion {
   nutrient: string;
   deficitAmount: number;
-  suggestedFood: string;
-  suggestedAmountG: number;
-  reasoning: string;
   priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  options: {
+    name: string;
+    amountG: number;
+    reasoning: string;
+    isPlantBased: boolean;
+  }[];
 }
 
 // For Hardcoded DB
@@ -53,5 +56,6 @@ export interface FoodItemDB {
   isHemeIron: boolean;
   isHighCalcium: boolean;
   isHighVitC: boolean;
+  isPlantBased: boolean;
   per100g: NutritionalValues;
 }
