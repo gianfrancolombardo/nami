@@ -66,9 +66,9 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
   };
 
   if (loading) return (
-    <div className="bg-white rounded-[2rem] p-8 border border-slate-100 flex flex-col items-center justify-center gap-4 shadow-sm animate-pulse min-h-[300px]">
+    <div className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10 flex flex-col items-center justify-center gap-4 shadow-xl animate-pulse min-h-[300px]">
       <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
-      <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">Consultando al Chef Nami...</p>
+      <p className="text-slate-300 font-bold text-xs uppercase tracking-widest">Consultando al Chef Nami...</p>
     </div>
   );
 
@@ -76,14 +76,14 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-emerald-50 border border-emerald-100 rounded-[2rem] p-8 flex flex-col gap-4 items-center text-center shadow-sm"
+      className="bg-emerald-500/10 backdrop-blur-xl border border-emerald-500/20 rounded-[2rem] p-8 flex flex-col gap-4 items-center text-center shadow-lg"
     >
-      <div className="bg-white p-3 rounded-full text-emerald-500 shadow-sm">
+      <div className="bg-emerald-500/20 p-3 rounded-full text-emerald-400 shadow-sm border border-emerald-500/20">
         <CheckCircle2 className="w-8 h-8" />
       </div>
       <div>
-        <h4 className="text-xl font-black text-emerald-900 tracking-tight mb-1">¡Misión Cumplida!</h4>
-        <p className="text-emerald-700/80 font-medium text-sm">{child.name} tiene todo lo que necesita por hoy.</p>
+        <h4 className="text-xl font-black text-emerald-100 tracking-tight mb-1">¡Misión Cumplida!</h4>
+        <p className="text-emerald-200/80 font-medium text-sm">{child.name} tiene todo lo que necesita por hoy.</p>
       </div>
     </motion.div>
   );
@@ -92,15 +92,15 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] p-6 lg:p-8 border border-slate-100 relative overflow-hidden"
+      className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] shadow-2xl p-6 lg:p-8 border border-white/10 relative overflow-hidden"
     >
       {/* Header */}
       <div className="flex flex-col gap-3 mb-8">
-        <div className="flex items-center gap-2 text-indigo-500 mb-1">
+        <div className="flex items-center gap-2 text-indigo-400 mb-1">
           <Sparkles className="w-4 h-4" />
           <span className="text-[10px] font-black uppercase tracking-widest">El Plan de Nami</span>
         </div>
-        <h2 className="text-2xl lg:text-3xl font-black text-slate-800 tracking-tight leading-tight">
+        <h2 className="text-2xl lg:text-3xl font-black text-white tracking-tight leading-tight">
           {roadmap.empatheticMessage}
         </h2>
       </div>
@@ -110,12 +110,12 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
         {roadmap.gaps && roadmap.gaps.map((gap: any, gapIdx: number) => {
           const isPrimary = gapIdx === 0;
           return (
-            <div key={gap.nutrient} className={cn("flex flex-col gap-4", !isPrimary && "opacity-90")}>
+            <div key={gap.nutrient} className={cn("flex flex-col gap-4", !isPrimary && "opacity-80")}>
               <div className="flex items-center gap-2">
-                <div className={cn("px-3 py-1 rounded-lg font-black text-xs uppercase tracking-wide", isPrimary ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-500")}>
+                <div className={cn("px-3 py-1 rounded-lg font-black text-xs uppercase tracking-wide", isPrimary ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30" : "bg-white/10 text-slate-400 border border-white/10")}>
                   {isPrimary ? "Misión Principal 🎯" : "Misión Secundaria"}
                 </div>
-                <h3 className={cn("font-black text-slate-800", isPrimary ? "text-xl" : "text-lg")}>
+                <h3 className={cn("font-black text-white", isPrimary ? "text-xl" : "text-lg")}>
                   Falta: {gap.nutrient}
                 </h3>
               </div>
@@ -124,18 +124,18 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
                 {(gap.options || []).map((opt: any) => (
                   <div key={opt.name} className={cn(
                     "flex flex-col p-4 rounded-[1.5rem] border transition-all",
-                    isPrimary ? "bg-slate-50 border-slate-100 hover:shadow-md" : "bg-white border-slate-100 text-sm"
+                    isPrimary ? "bg-white/10 border-white/10 hover:bg-white/15" : "bg-white/5 border-white/5 text-sm"
                   )}>
                     <div className="flex justify-between items-start mb-2">
-                      <span className={cn("font-black text-slate-800 leading-tight", isPrimary ? "text-lg" : "text-sm")}>{opt.name}</span>
-                      <span className="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded ml-2 whitespace-nowrap">{opt.amountG}g</span>
+                      <span className={cn("font-black text-slate-200 leading-tight border-b border-transparent hover:border-indigo-400/50 transition-colors", isPrimary ? "text-lg" : "text-sm")}>{opt.name}</span>
+                      <span className="text-[10px] font-bold text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded ml-2 whitespace-nowrap border border-indigo-500/20">{opt.amountG}g</span>
                     </div>
 
                     {/* Synergy Tip */}
-                    <div className="mt-auto pt-2 border-t border-slate-100/50">
+                    <div className="mt-auto pt-2 border-t border-white/10">
                       <div className="flex gap-1.5 items-start">
-                        <Lightbulb className="w-3 h-3 text-amber-500 mt-0.5 flex-shrink-0" />
-                        <p className="text-[10px] leading-tight text-slate-500 font-medium">
+                        <Lightbulb className="w-3 h-3 text-amber-400 mt-0.5 flex-shrink-0" />
+                        <p className="text-[10px] leading-tight text-slate-400 font-medium">
                           {opt.synergy}
                         </p>
                       </div>
