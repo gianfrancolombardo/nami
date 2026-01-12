@@ -23,6 +23,17 @@ export const parseFoodInput = async (inputText: string, childAgeMonths: number) 
     return null;
 };
 
+export const parseFoodImage = async (imageBase64: string, childAgeMonths: number) => {
+    // Only Gemini supports vision in this setup for now
+    if (hasGemini()) {
+        console.log("AI Manager: Using Gemini Vision");
+        // @ts-ignore
+        return import('./geminiService').then(m => m.parseFoodImage(imageBase64, childAgeMonths));
+    }
+    console.warn("AI Manager: No Vision capable model enabled.");
+    return null;
+};
+
 export const getSmartRecipe = async (
     childName: string,
     childAgeMonths: number,
@@ -42,7 +53,19 @@ export const getNutritionalRoadmap = async (
     ageMonths: number,
     gaps: { nutrient: string; amount: number }[]
 ) => {
-    if (hasOpenAI()) return getRoadmapOpenAI(childName, ageMonths, gaps);
     if (hasGemini()) return getRoadmapGemini(childName, ageMonths, gaps);
+    return null;
+};
+
+export const getHistoryAnalysis = async (
+    childName: string,
+    ageMonths: number,
+    aggregatedData: any
+) => {
+    // Only Gemini supports this for now
+    if (hasGemini()) {
+        // @ts-ignore
+        return import('./geminiService').then(m => m.getHistoryAnalysis(childName, ageMonths, aggregatedData));
+    }
     return null;
 };

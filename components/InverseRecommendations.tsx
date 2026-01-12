@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FoodItemDB, DailyTargets, NutritionalValues, Suggestion, ChildProfile } from '../types';
 import { getNutritionalRoadmap, getSmartRecipe } from '../services/aiManager';
-import { Lightbulb, CheckCircle2, ChefHat, Loader2, Sparkles } from 'lucide-react';
+import { Lightbulb, CheckCircle2, ChefHat, Loader2, Sparkles, Star, ThumbsUp, AlertTriangle, AlertOctagon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -19,11 +19,13 @@ interface Props {
 export const InverseRecommendations: React.FC<Props> = ({ current, targets, child }) => {
   const [roadmap, setRoadmap] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [calculating, setCalculating] = useState(true); // New state to handle initial calculation delay
   const [aiRecipe, setAiRecipe] = useState<string | null>(null);
   const [loadingRecipe, setLoadingRecipe] = useState(false);
 
   useEffect(() => {
     const fetchRoadmap = async () => {
+      // Calculate gaps first
       const gaps = [
         { nutrient: 'Hierro', amount: targets.iron_mg - current.iron_mg },
         { nutrient: 'Proteína', amount: targets.protein_g - current.protein_g },
@@ -33,19 +35,77 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
         { nutrient: 'Vit D', amount: targets.vit_d_iu - current.vit_d_iu }
       ].filter(g => g.amount > (g.nutrient === 'Calcio' ? 50 : 0.5));
 
+      // If no gaps, we are done
       if (gaps.length === 0) {
         setRoadmap(null);
+        setCalculating(false);
         return;
       }
 
+      if (!child.name || !child.id) {
+        setCalculating(false);
+        return;
+      }
+
+      const CACHE_KEY = `NAMI_ROADMAP_${child.id}`;
+      const cached = localStorage.getItem(CACHE_KEY);
+
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          setRoadmap(parsed);
+          setCalculating(false);
+          return;
+        } catch (e) {
+          console.error("Error parsing cache", e);
+          localStorage.removeItem(CACHE_KEY);
+        }
+      }
+
       setLoading(true);
-      const data = await getNutritionalRoadmap(child.name, 24, gaps.sort((a, b) => b.amount - a.amount).slice(0, 3));
-      if (data) setRoadmap(data);
-      setLoading(false);
+      setCalculating(false); // We have started loading
+      try {
+        const data = await getNutritionalRoadmap(child.name, 24, gaps.sort((a, b) => b.amount - a.amount).slice(0, 3));
+        if (data) {
+          setRoadmap(data);
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        }
+      } catch (error) {
+        console.error("Error fetching roadmap:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchRoadmap();
-  }, [current, targets]);
+    setCalculating(true); // Reset to calculating state on prop change
+    const timeoutId = setTimeout(() => {
+      fetchRoadmap();
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [current, targets, child.name, child.id]);
+
+  // Status Color Logic
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PERFECT': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]';
+      case 'GOOD': return 'bg-blue-500/20 text-blue-300 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.3)]';
+      case 'WARNING': return 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]';
+      case 'CRITICAL': return 'bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse';
+      default: return 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+    }
+  };
+
+  const StatusIcon = ({ status }: { status: string }) => {
+    switch (status) {
+      case 'PERFECT': return <Star className="w-5 h-5 fill-current" />;
+      case 'GOOD': return <ThumbsUp className="w-5 h-5 fill-current" />;
+      case 'WARNING': return <AlertTriangle className="w-5 h-5 fill-current opacity-80" />;
+      case 'CRITICAL': return <AlertOctagon className="w-5 h-5 fill-current opacity-90" />;
+      default: return <Sparkles className="w-5 h-5" />;
+    }
+  };
+
 
   const handleGenerateUnifiedRecipe = async () => {
     if (!roadmap || !roadmap.gaps) return;
@@ -65,10 +125,12 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
     setLoadingRecipe(false);
   };
 
-  if (loading) return (
+  if (calculating || loading) return (
     <div className="bg-white/5 backdrop-blur-xl rounded-[2rem] p-8 border border-white/10 flex flex-col items-center justify-center gap-4 shadow-xl animate-pulse min-h-[300px]">
       <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
-      <p className="text-slate-300 font-bold text-xs uppercase tracking-widest">Consultando al Chef Nami...</p>
+      <p className="text-slate-300 font-bold text-xs uppercase tracking-widest">
+        {calculating ? "Analizando nutrientes..." : "Consultando al Chef Nami..."}
+      </p>
     </div>
   );
 
@@ -96,10 +158,18 @@ export const InverseRecommendations: React.FC<Props> = ({ current, targets, chil
     >
       {/* Header */}
       <div className="flex flex-col gap-3 mb-8">
-        <div className="flex items-center gap-2 text-indigo-400 mb-1">
-          <Sparkles className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">El Plan de Nami</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-indigo-400 mb-1">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-[10px] font-black uppercase tracking-widest">El Plan de Nami</span>
+          </div>
+          {roadmap.status && (
+            <div className={cn("p-2 rounded-xl flex items-center justify-center transition-all", getStatusColor(roadmap.status))}>
+              <StatusIcon status={roadmap.status} />
+            </div>
+          )}
         </div>
+
         <h2 className="text-2xl lg:text-3xl font-black text-white tracking-tight leading-tight">
           {roadmap.empatheticMessage}
         </h2>

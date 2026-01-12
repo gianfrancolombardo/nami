@@ -1,6 +1,13 @@
 import OpenAI from 'openai';
 import { NutritionalValues } from "../types";
-import { PARSE_SYSTEM_INSTRUCTION, RECIPE_SYSTEM_INSTRUCTION, ROADMAP_SYSTEM_INSTRUCTION } from "./prompts";
+import {
+    PARSE_SYSTEM_INSTRUCTION,
+    RECIPE_SYSTEM_INSTRUCTION,
+    ROADMAP_SYSTEM_INSTRUCTION,
+    generateParsePrompt,
+    generateRecipePrompt,
+    generateRoadmapPrompt
+} from "./prompts";
 
 interface ParsedFood {
     name: string;
@@ -24,12 +31,14 @@ export const parseFoodInput = async (
     const openai = getClient();
     if (!openai) return null;
 
+    const model = import.meta.env.VITE_OPENAI_MODEL || "gpt-4o-mini";
+
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: model,
             messages: [
                 { role: "system", content: PARSE_SYSTEM_INSTRUCTION },
-                { role: "user", content: `Edad: ${childAgeMonths} meses. Entrada: "${inputText}"` }
+                { role: "user", content: generateParsePrompt(inputText, childAgeMonths) }
             ],
             response_format: { type: "json_object" }
         });
@@ -59,13 +68,12 @@ export const getSmartRecipe = async (
     const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
     try {
-        const dataString = ingredientsData.map(d => `${d.name} (${d.nutrient}: +${d.amount})`).join(", ");
-        const prompt = `Niño: ${childName}, Edad: ${childAgeMonths} meses.
-Datos de alimentos y huecos: ${dataString}.
-Crea la propuesta directa.`;
+        const prompt = generateRecipePrompt(childName, childAgeMonths, ingredientsData);
+
+        const model = import.meta.env.VITE_OPENAI_MODEL || "gpt-4o-mini";
 
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: model,
             messages: [
                 { role: "system", content: RECIPE_SYSTEM_INSTRUCTION },
                 { role: "user", content: prompt },
@@ -88,11 +96,12 @@ export const getNutritionalRoadmap = async (
     if (!openai) return null;
 
     try {
+        const model = import.meta.env.VITE_OPENAI_MODEL || "gpt-4o-mini";
         const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: model,
             messages: [
                 { role: "system", content: ROADMAP_SYSTEM_INSTRUCTION },
-                { role: "user", content: `Analiza estos huecos para ${childName} (${ageMonths} meses): ${JSON.stringify(gaps)}.` }
+                { role: "user", content: generateRoadmapPrompt(childName, ageMonths, gaps) }
             ],
             response_format: { type: "json_object" }
         });
